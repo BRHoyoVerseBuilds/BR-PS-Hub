@@ -1,0 +1,311 @@
+<html><head><base href="http://localhost"/><title>BReitan's PS5 Hub</title><style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #02084E;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(2px 2px at calc(random() * 100%) calc(random() * 100%),
+        white, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at calc(random() * 100%) calc(random() * 100%),
+        white, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at calc(random() * 100%) calc(random() * 100%),
+        white, rgba(0, 0, 0, 0));
+    animation: twinkle 5s infinite;
+    opacity: 0.3;
+}
+
+.hub-container {
+    background: rgba(47, 5, 35, 0.8);
+    border-radius: 30px;
+    padding: 3rem;
+    box-shadow: 0 0 50px rgba(39, 15, 107, 0.3);
+    max-width: 800px;
+    width: 90%;
+    position: relative;
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+.nebula {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(175, 118, 188, 0.2), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(39, 15, 107, 0.2), transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(2, 8, 78, 0.2), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.title {
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, #AF76BC, #270F6B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    text-shadow: 0 0 20px rgba(175, 118, 188, 0.5);
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.dropdown-container {
+    position: relative;
+    width: 100%;
+}
+
+.hub-button {
+    width: 100%;
+    padding: 1.2rem;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(175,118,188,0.1), rgba(39,15,107,0.05));
+    color: white;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: rgba(47, 5, 35, 0.95);
+    width: 100%;
+    border-radius: 0 0 15px 15px;
+    overflow: hidden;
+    z-index: 2;
+    backdrop-filter: blur(10px);
+}
+
+.dropdown-item {
+    padding: 1rem;
+    color: white;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(175,118,188,0.2);
+}
+
+.dropdown-container:hover .dropdown-content {
+    display: block;
+}
+
+.hub-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(175,118,188,0.1), transparent);
+    transform: translateX(-100%);
+    transition: 0.5s;
+}
+
+.hub-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(175,118,188,0.3);
+    background: linear-gradient(135deg, rgba(175,118,188,0.2), rgba(39,15,107,0.1));
+}
+
+.hub-button:hover::before {
+    transform: translateX(100%);
+}
+
+.floating-icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+.floating-icon img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(175,118,188,0.5);
+}
+</style></head><body>
+
+<div class="nebula"></div>
+<div class="hub-container">
+    <div class="floating-icon">
+        <img src="https://steamuserimages-a.akamaihd.net/ugc/1767080776700175070/8F347DDBE94762E12C9297970F6164AD5CC0232F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false.png" alt="Logo">
+    </div>
+    <h1 class="title">BReitan's PS5 Hub</h1>
+    <div class="button-grid">
+        <!-- Gaming Related Links -->
+        <div class="dropdown-container">
+            <button class="hub-button">Game8</button>
+            <div class="dropdown-content">
+                <a href="https://game8.co/" class="dropdown-item">Home</a>
+                <a href="https://game8.co/games/Honkai-Star-Rail" class="dropdown-item">Star Rail</a>
+                <a href="https://game8.co/games/Genshin-Impact" class="dropdown-item">Genshin Impact</a>
+                <a href="https://game8.co/games/Zenless-Zone-Zero" class="dropdown-item">Zenless Zone Zero</a>
+                <a href="https://game8.co/games/Wuthering-Waves" class="dropdown-item">Wuthering Waves</a>
+            </div>
+        </div>
+        
+        <div class="dropdown-container">
+            <button class="hub-button">Prydwen</button>
+            <div class="dropdown-content">
+                <a href="https://www.prydwen.gg/" class="dropdown-item">Home</a>
+                <a href="https://www.prydwen.gg/genshin" class="dropdown-item">Genshin Impact</a>
+                <a href="https://www.prydwen.gg/star-rail" class="dropdown-item">Honkai Star Rail</a>
+                <a href="https://www.prydwen.gg/zzz" class="dropdown-item">Zenless Zone Zero</a>
+                <a href="https://www.prydwen.gg/wuthering-waves" class="dropdown-item">Wuthering Waves</a>
+            </div>
+        </div>
+        
+        <div class="dropdown-container">
+            <button class="hub-button">HSR Map</button>
+            <div class="dropdown-content">
+                <a href="https://star-rail-map.appsample.com/" class="dropdown-item">Full Map</a>
+                <a href="https://star-rail-map.appsample.com/chest" class="dropdown-item">Chests</a>
+                <a href="https://star-rail-map.appsample.com/challenge" class="dropdown-item">Challenges</a>
+            </div>
+        </div>
+        
+        <div class="dropdown-container">
+            <button class="hub-button">Genshin Map</button>
+            <div class="dropdown-content">
+                <a href="https://genshin-impact-map.appsample.com/" class="dropdown-item">Full Map</a>
+                <a href="https://genshin-impact-map.appsample.com/chest" class="dropdown-item">Chests</a>
+                <a href="https://genshin-impact-map.appsample.com/oculus" class="dropdown-item">Oculi</a>
+            </div>
+        </div>
+        
+        <!-- Media & Entertainment -->
+        <div class="dropdown-container">
+            <button class="hub-button">YouTube</button>
+            <div class="dropdown-content">
+                <a href="https://www.youtube.com" class="dropdown-item">Home</a>
+                <a href="https://www.youtube.com/playlist?list=WL" class="dropdown-item">Watch Later</a>
+                <a href="https://www.youtube.com/feed/history" class="dropdown-item">History</a>
+            </div>
+        </div>
+        
+        <div class="dropdown-container">
+            <button class="hub-button">Twitch</button>
+            <div class="dropdown-content">
+                <a href="https://www.twitch.tv/" class="dropdown-item">Home</a>
+                <a href="https://www.twitch.tv/directory/following" class="dropdown-item">Following</a>
+                <a href="https://www.twitch.tv/directory" class="dropdown-item">Browse</a>
+            </div>
+        </div>
+        
+        <!-- General & Social -->
+        <div class="dropdown-container">
+            <button class="hub-button">Google</button>
+            <div class="dropdown-content">
+                <a href="https://www.google.com" class="dropdown-item">Search</a>
+                <a href="https://mail.google.com" class="dropdown-item">Gmail</a>
+                <a href="https://drive.google.com" class="dropdown-item">Drive</a>
+            </div>
+        </div>
+        
+        <div class="dropdown-container">
+            <button class="hub-button">Reddit</button>
+            <div class="dropdown-content">
+                <a href="https://www.reddit.com" class="dropdown-item">Home</a>
+                <a href="https://www.reddit.com/r/all" class="dropdown-item">All</a>
+                <a href="https://www.reddit.com/r/popular" class="dropdown-item">Popular</a>
+            </div>
+        </div>
+        
+        <!-- Tools -->
+        <div class="dropdown-container">
+            <button class="hub-button">Suno AI</button>
+            <div class="dropdown-content">
+                <a href="https://suno.com/" class="dropdown-item">Home</a>
+                <a href="https://suno.com/create" class="dropdown-item">Create</a>
+                <a href="https://suno.com/library" class="dropdown-item">Library</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.hub-button').forEach(button => {
+    button.addEventListener('mouseenter', () => {
+        button.style.transform = 'scale(1.05)';
+    });
+    
+    button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1)';
+    });
+});
+
+function createStars() {
+    const starsContainer = document.createElement('div');
+    starsContainer.style.position = 'fixed';
+    starsContainer.style.width = '100%';
+    starsContainer.style.height = '100%';
+    starsContainer.style.top = '0';
+    starsContainer.style.left = '0';
+    starsContainer.style.pointerEvents = 'none';
+    starsContainer.style.zIndex = '0';
+    
+    for(let i = 0; i < 200; i++) {
+        const star = document.createElement('div');
+        star.style.position = 'absolute';
+        star.style.width = '2px';
+        star.style.height = '2px';
+        star.style.background = 'white';
+        star.style.borderRadius = '50%';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animation = `twinkle ${Math.random() * 3 + 2}s infinite`;
+        starsContainer.appendChild(star);
+    }
+    
+    document.body.insertBefore(starsContainer, document.body.firstChild);
+}
+
+createStars();
+</script>
+
+</body></html>
