@@ -1,4 +1,4 @@
-<html><head><base href="http://localhost"/><title>BReitan's PS5 Hub</title><style>
+<html><head><base href="http://localhost"><title>BReitan&apos;s PS5 Hub</title><style>
 * {
     margin: 0;
     padding: 0;
@@ -82,7 +82,36 @@ body::before {
 
 .dropdown-container {
     position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: rgba(47, 5, 35, 0.95);
+    min-width: 200px;
+    border-radius: 0 0 15px 15px;
+    z-index: 100;
+}
+
+.dropdown-container:hover > .dropdown-content {
+    display: block;
+}
+
+.nested-dropdown-container {
+    position: relative;
     width: 100%;
+}
+
+.nested-dropdown-container .dropdown-content {
+    left: 100%;
+    top: 0;
+    display: none;
+}
+
+.nested-dropdown-container:hover .dropdown-content {
+    display: block;
 }
 
 .hub-button {
@@ -100,17 +129,6 @@ body::before {
     backdrop-filter: blur(5px);
 }
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background: rgba(47, 5, 35, 0.95);
-    width: 100%;
-    border-radius: 0 0 15px 15px;
-    overflow: hidden;
-    z-index: 2;
-    backdrop-filter: blur(10px);
-}
-
 .dropdown-item {
     padding: 1rem;
     color: white;
@@ -121,10 +139,6 @@ body::before {
 
 .dropdown-item:hover {
     background: rgba(175,118,188,0.2);
-}
-
-.dropdown-container:hover .dropdown-content {
-    display: block;
 }
 
 .hub-button::before {
@@ -168,14 +182,68 @@ body::before {
     animation: pulse 2s ease-in-out infinite;
     box-shadow: 0 0 20px rgba(175,118,188,0.5);
 }
+
+.secret-hint {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    color: rgba(255, 255, 255, 0.1);
+    font-size: 0.8em;
+    z-index: 2;
+}
+
+.secret-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: rgba(47, 5, 35, 0.95);
+    padding: 2rem;
+    border-radius: 20px;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 50px rgba(175, 118, 188, 0.5);
+}
+
+.secret-menu.show {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.secret-button {
+    background: linear-gradient(135deg, #AF76BC, #270F6B);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    margin: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.secret-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(175, 118, 188, 0.3);
+}
+
+.close-secret {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5em;
+}
 </style></head><body>
 
 <div class="nebula"></div>
 <div class="hub-container">
     <div class="floating-icon">
-        <img src="https://steamuserimages-a.akamaihd.net/ugc/1767080776700175070/8F347DDBE94762E12C9297970F6164AD5CC0232F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false.png" alt="Logo">
+        <img src="https://steamuserimages-a.akamaihd.net/ugc/1767080776700175070/8F347DDBE94762E12C9297970F6164AD5CC0232F/?imw=512&amp;&amp;ima=fit&amp;impolicy=Letterbox&amp;imcolor=%23000000&amp;letterbox=false.png" alt="Logo">
     </div>
-    <h1 class="title">BReitan's PS5 Hub</h1>
+    <h1 class="title">BReitan&apos;s PS5 Hub</h1>
     <div class="button-grid">
         <!-- Gaming Related Links -->
         <div class="dropdown-container">
@@ -229,11 +297,23 @@ body::before {
         </div>
         
         <div class="dropdown-container">
-            <button class="hub-button">Twitch</button>
+            <button class="hub-button" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(event)">Twitch</button>
             <div class="dropdown-content">
                 <a href="https://www.twitch.tv/" class="dropdown-item">Home</a>
                 <a href="https://www.twitch.tv/directory/following" class="dropdown-item">Following</a>
                 <a href="https://www.twitch.tv/directory" class="dropdown-item">Browse</a>
+                <a href="https://www.twitch.tv/channels" class="dropdown-item">Channels</a>
+
+                <div class="nested-dropdown-container">
+                    <button class="hub-button" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(event)">Twitch Channels</button>
+                    <div class="dropdown-content">
+                        <a href="https://www.twitch.tv/kinkymation" class="dropdown-item">Kinkymation</a>
+                        <a href="https://www.twitch.tv/mollozhang" class="dropdown-item">Mollozhang</a>
+                        <a href="https://www.twitch.tv/itssamslade" class="dropdown-item">Itssamslade</a>
+                        <a href="https://www.twitch.tv/minaaoyama" class="dropdown-item">Minaaoyama</a>
+                        <a href="https://www.twitch.tv/ibcheechy" class="dropdown-item">Ibcheechy</a>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -268,44 +348,35 @@ body::before {
     </div>
 </div>
 
-<script>
-document.querySelectorAll('.hub-button').forEach(button => {
-    button.addEventListener('mouseenter', () => {
-        button.style.transform = 'scale(1.05)';
-    });
-    
-    button.addEventListener('mouseleave', () => {
-        button.style.transform = 'scale(1)';
-    });
-});
+<div class="secret-menu" id="secretMenu">
+    <button class="close-secret" onclick="toggleSecretMenu()">&#xd7;</button>
+    <h2 style="color: white; margin-bottom: 1rem;">Secret Menu</h2>
+    <button class="secret-button" onclick="window.open(&apos;https://www.youtube.com/watch?v=dQw4w9WgXcQ&apos;)">Don&apos;t Click Me</button>
+    <button class="secret-button" onclick="makeItRain()">Make it Rain</button>
+    <button class="secret-button" onclick="partyMode()">Party Mode</button>
+</div>
 
-function createStars() {
-    const starsContainer = document.createElement('div');
-    starsContainer.style.position = 'fixed';
-    starsContainer.style.width = '100%';
-    starsContainer.style.height = '100%';
-    starsContainer.style.top = '0';
-    starsContainer.style.left = '0';
-    starsContainer.style.pointerEvents = 'none';
-    starsContainer.style.zIndex = '0';
-    
-    for(let i = 0; i < 200; i++) {
-        const star = document.createElement('div');
-        star.style.position = 'absolute';
-        star.style.width = '2px';
-        star.style.height = '2px';
-        star.style.background = 'white';
-        star.style.borderRadius = '50%';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.animation = `twinkle ${Math.random() * 3 + 2}s infinite`;
-        starsContainer.appendChild(star);
-    }
-    
-    document.body.insertBefore(starsContainer, document.body.firstChild);
+<div class="secret-hint">
+    Press K + O + N + A + M + I
+</div>
+
+<script>
+function toggleDropdown(event) {
+    event.target.setAttribute("aria-expanded", event.target.getAttribute("aria-expanded") === "true" ? "false" : "true");
 }
 
-createStars();
+function toggleSecretMenu() {
+    var menu = document.getElementById("secretMenu");
+    menu.classList.toggle("show");
+}
+
+function makeItRain() {
+    // Add makeItRain function implementation here
+}
+
+function partyMode() {
+    // Add partyMode function implementation here
+}
 </script>
 
 </body></html>
