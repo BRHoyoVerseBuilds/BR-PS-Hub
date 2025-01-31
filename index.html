@@ -1,5 +1,6 @@
 <html>
 <head>
+    <base href="http://localhost">
     <title>BReitan's PS5 Hub</title>
     <style>
         * {
@@ -81,7 +82,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2rem;
         }
 
         .dropdown-container {
@@ -241,15 +241,51 @@
             font-size: 1.5em;
         }
 
-        .category-title {
-            color: white;
+        /* New category heading styles */
+        .category-heading {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: #AF76BC;
             font-size: 1.5em;
-            margin: 2rem 0 1rem 0;
+            border-bottom: 2px solid rgba(175, 118, 188, 0.3);
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid rgba(175,118,188,0.3);
-            background: linear-gradient(45deg, rgba(175,118,188,0.1), rgba(39,15,107,0.05));
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
+        }
+
+        /* New scroll button styles */
+        .scroll-btn {
+            position: fixed;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(175, 118, 188, 0.5);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .scroll-btn:hover {
+            background: rgba(175, 118, 188, 0.8);
+            transform: scale(1.1);
+        }
+
+        .scroll-up {
+            top: 20px;
+        }
+
+        .scroll-down {
+            bottom: 20px;
+        }
+
+        .scroll-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
         }
     </style>
 </head>
@@ -261,14 +297,14 @@
         <img src="https://steamuserimages-a.akamaihd.net/ugc/1767080776700175070/8F347DDBE94762E12C9297970F6164AD5CC0232F/?imw=512&&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false.png" alt="Logo">
     </div>
     <h1 class="title">BReitan's PS5 Hub</h1>
-
-    <!-- Game Guides & Resources -->
-    <h2 class="category-title">Game Guides & Resources</h2>
+    
+    <h2 class="category-heading">🎮 Game Guides & Resources</h2>
     <div class="button-grid">
         <div class="dropdown-container">
             <button class="hub-button">Game8</button>
             <div class="dropdown-content">
                 <a href="https://game8.co/" class="dropdown-item">Home</a>
+                
                 <div class="nested-dropdown-container">
                     <button class="hub-button">Genshin Impact</button>
                     <div class="dropdown-content">
@@ -279,6 +315,7 @@
                         <a href="https://game8.co/games/Genshin-Impact/archives/304759" class="dropdown-item">Codes</a>
                     </div>
                 </div>
+                
                 <div class="nested-dropdown-container">
                     <button class="hub-button">Honkai Star Rail</button>
                     <div class="dropdown-content">
@@ -289,6 +326,7 @@
                         <a href="https://game8.co/games/Honkai-Star-Rail/archives/410296" class="dropdown-item">Codes</a>
                     </div>
                 </div>
+                
                 <div class="nested-dropdown-container">
                     <button class="hub-button">Zenless Zone Zero</button>
                     <div class="dropdown-content">
@@ -300,6 +338,7 @@
                         <a href="https://game8.co/games/Zenless-Zone-Zero/archives/435683" class="dropdown-item">Codes</a>
                     </div>
                 </div>
+                
                 <div class="nested-dropdown-container">
                     <button class="hub-button">Wuthering Waves</button>
                     <div class="dropdown-content">
@@ -326,8 +365,7 @@
         </div>
     </div>
 
-    <!-- Game Maps -->
-    <h2 class="category-title">Game Maps</h2>
+    <h2 class="category-heading">🗺️ Game Maps</h2>
     <div class="button-grid">
         <div class="dropdown-container">
             <button class="hub-button">HSR Map</button>
@@ -348,8 +386,7 @@
         </div>
     </div>
 
-    <!-- Streaming & Entertainment -->
-    <h2 class="category-title">Streaming & Entertainment</h2>
+    <h2 class="category-heading">📺 Streaming & Entertainment</h2>
     <div class="button-grid">
         <div class="dropdown-container">
             <button class="hub-button" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(event)">Twitch</button>
@@ -382,8 +419,7 @@
         </div>
     </div>
 
-    <!-- Anime & Shows -->
-    <h2 class="category-title">Anime & Shows</h2>
+    <h2 class="category-heading">🍿 Anime & Shows</h2>
     <div class="button-grid">
         <div class="dropdown-container">
             <button class="hub-button">Pokéflix</button>
@@ -409,8 +445,7 @@
         </div>
     </div>
 
-    <!-- Social & General -->
-    <h2 class="category-title">Social & General</h2>
+    <h2 class="category-heading">🌐 Social & Web Tools</h2>
     <div class="button-grid">
         <div class="dropdown-container">
             <button class="hub-button">Google</button>
@@ -431,8 +466,7 @@
         </div>
     </div>
 
-    <!-- Tools & Media -->
-    <h2 class="category-title">Tools & Media</h2>
+    <h2 class="category-heading">🛠️ Media & Creative Tools</h2>
     <div class="button-grid">
         <div class="dropdown-container">
             <button class="hub-button">Suno AI</button>
@@ -454,6 +488,18 @@
     </div>
 </div>
 
+<!-- Scroll buttons -->
+<button class="scroll-btn scroll-up" onclick="scrollToTop()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 8l-6 6 1.5 1.5 4.5-4.5 4.5 4.5 1.5-1.5z"/>
+    </svg>
+</button>
+<button class="scroll-btn scroll-down" onclick="scrollToBottom()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M16.5 8.5L12 13l-4.5-4.5L6 10l6 6 6-6z"/>
+    </svg>
+</button>
+
 <div class="secret-menu" id="secretMenu">
     <button class="close-secret" onclick="toggleSecretMenu()">&#xd7;</button>
     <h2 style="color: white; margin-bottom: 1rem;">Secret Menu</h2>
@@ -467,6 +513,22 @@
 </div>
 
 <script>
+    function scrollToTop() {
+        const stepSize = window.innerHeight * 0.8; // Scroll 80% of viewport height
+        window.scrollBy({
+            top: -stepSize,
+            behavior: 'smooth'
+        });
+    }
+
+    function scrollToBottom() {
+        const stepSize = window.innerHeight * 0.8; // Scroll 80% of viewport height
+        window.scrollBy({
+            top: stepSize,
+            behavior: 'smooth'
+        });
+    }
+
     function toggleDropdown(event) {
         event.target.setAttribute("aria-expanded", event.target.getAttribute("aria-expanded") === "true" ? "false" : "true");
     }
