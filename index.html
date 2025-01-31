@@ -1,0 +1,482 @@
+<html>
+<head>
+    <title>BReitan's PS5 Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #02084E;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(2px 2px at calc(random() * 100%) calc(random() * 100%),
+                white, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at calc(random() * 100%) calc(random() * 100%),
+                white, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at calc(random() * 100%) calc(random() * 100%),
+                white, rgba(0, 0, 0, 0));
+            animation: twinkle 5s infinite;
+            opacity: 0.3;
+        }
+
+        .hub-container {
+            background: rgba(47, 5, 35, 0.8);
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 0 50px rgba(39, 15, 107, 0.3);
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+            backdrop-filter: blur(10px);
+            z-index: 1;
+        }
+
+        .nebula {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(175, 118, 188, 0.2), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(39, 15, 107, 0.2), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(2, 8, 78, 0.2), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #AF76BC, #270F6B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            text-shadow: 0 0 20px rgba(175, 118, 188, 0.5);
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dropdown-container {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: rgba(47, 5, 35, 0.95);
+            min-width: 200px;
+            border-radius: 0 0 15px 15px;
+            z-index: 100;
+        }
+
+        .dropdown-container:hover > .dropdown-content {
+            display: block;
+        }
+
+        .nested-dropdown-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .nested-dropdown-container .dropdown-content {
+            left: 100%;
+            top: 0;
+            display: none;
+        }
+
+        .nested-dropdown-container:hover .dropdown-content {
+            display: block;
+        }
+
+        .hub-button {
+            width: 100%;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(175,118,188,0.1), rgba(39,15,107,0.05));
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .dropdown-item {
+            padding: 1rem;
+            color: white;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(175,118,188,0.2);
+        }
+
+        .hub-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(175,118,188,0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .hub-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(175,118,188,0.3);
+            background: linear-gradient(135deg, rgba(175,118,188,0.2), rgba(39,15,107,0.1));
+        }
+
+        .hub-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .floating-icon {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        .floating-icon img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(175,118,188,0.5);
+        }
+
+        .secret-hint {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 0.8em;
+            z-index: 2;
+        }
+
+        .secret-menu {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(47, 5, 35, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 50px rgba(175, 118, 188, 0.5);
+        }
+
+        .secret-menu.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .secret-button {
+            background: linear-gradient(135deg, #AF76BC, #270F6B);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            margin: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .secret-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(175, 118, 188, 0.3);
+        }
+
+        .close-secret {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5em;
+        }
+
+        .category-title {
+            color: white;
+            font-size: 1.5em;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(175,118,188,0.3);
+            background: linear-gradient(45deg, rgba(175,118,188,0.1), rgba(39,15,107,0.05));
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="nebula"></div>
+<div class="hub-container">
+    <div class="floating-icon">
+        <img src="https://steamuserimages-a.akamaihd.net/ugc/1767080776700175070/8F347DDBE94762E12C9297970F6164AD5CC0232F/?imw=512&&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false.png" alt="Logo">
+    </div>
+    <h1 class="title">BReitan's PS5 Hub</h1>
+
+    <!-- Game Guides & Resources -->
+    <h2 class="category-title">Game Guides & Resources</h2>
+    <div class="button-grid">
+        <div class="dropdown-container">
+            <button class="hub-button">Game8</button>
+            <div class="dropdown-content">
+                <a href="https://game8.co/" class="dropdown-item">Home</a>
+                <div class="nested-dropdown-container">
+                    <button class="hub-button">Genshin Impact</button>
+                    <div class="dropdown-content">
+                        <a href="https://game8.co/games/Genshin-Impact/archives/296707" class="dropdown-item">Characters</a>
+                        <a href="https://game8.co/games/Genshin-Impact/archives/297497" class="dropdown-item">Weapons</a>
+                        <a href="https://game8.co/games/Genshin-Impact/archives/297500" class="dropdown-item">Banners</a>
+                        <a href="https://game8.co/games/Genshin-Impact/archives/301601" class="dropdown-item">Events</a>
+                        <a href="https://game8.co/games/Genshin-Impact/archives/304759" class="dropdown-item">Codes</a>
+                    </div>
+                </div>
+                <div class="nested-dropdown-container">
+                    <button class="hub-button">Honkai Star Rail</button>
+                    <div class="dropdown-content">
+                        <a href="https://game8.co/games/Honkai-Star-Rail/archives/404256" class="dropdown-item">Characters</a>
+                        <a href="https://game8.co/games/Honkai-Star-Rail/archives/406599" class="dropdown-item">Light Cones</a>
+                        <a href="https://game8.co/games/Honkai-Star-Rail/archives/408381" class="dropdown-item">Banners</a>
+                        <a href="https://game8.co/games/Honkai-Star-Rail/archives/408749" class="dropdown-item">Events</a>
+                        <a href="https://game8.co/games/Honkai-Star-Rail/archives/410296" class="dropdown-item">Codes</a>
+                    </div>
+                </div>
+                <div class="nested-dropdown-container">
+                    <button class="hub-button">Zenless Zone Zero</button>
+                    <div class="dropdown-content">
+                        <a href="https://game8.co/games/Zenless-Zone-Zero/archives/435684" class="dropdown-item">Characters</a>
+                        <a href="https://game8.co/games/Zenless-Zone-Zero/archives/435686" class="dropdown-item">W-Engines</a>
+                        <a href="https://game8.co/games/Zenless-Zone-Zero/archives/451334" class="dropdown-item">Bangboos</a>
+                        <a href="https://game8.co/games/Zenless-Zone-Zero/archives/435687" class="dropdown-item">Banners</a>
+                        <a href="https://game8.co/games/Zenless-Zone-Zero/archives/457176" class="dropdown-item">Events</a>
+                        <a href="https://game8.co/games/Zenless-Zone-Zero/archives/435683" class="dropdown-item">Codes</a>
+                    </div>
+                </div>
+                <div class="nested-dropdown-container">
+                    <button class="hub-button">Wuthering Waves</button>
+                    <div class="dropdown-content">
+                        <a href="https://game8.co/games/Wuthering-Waves/archives/452489" class="dropdown-item">Characters</a>
+                        <a href="https://game8.co/games/Wuthering-Waves/archives/452490" class="dropdown-item">Weapons</a>
+                        <a href="https://game8.co/games/Wuthering-Waves/archives/452491" class="dropdown-item">Echoes</a>
+                        <a href="https://game8.co/games/Wuthering-Waves/archives/453303" class="dropdown-item">Banners</a>
+                        <a href="https://game8.co/games/Wuthering-Waves/archives/453473" class="dropdown-item">Events</a>
+                        <a href="https://game8.co/games/Wuthering-Waves/archives/453149" class="dropdown-item">Codes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dropdown-container">
+            <button class="hub-button">Prydwen</button>
+            <div class="dropdown-content">
+                <a href="https://www.prydwen.gg/" class="dropdown-item">Home</a>
+                <a href="https://www.prydwen.gg/genshin" class="dropdown-item">Genshin Impact</a>
+                <a href="https://www.prydwen.gg/star-rail" class="dropdown-item">Honkai Star Rail</a>
+                <a href="https://www.prydwen.gg/zzz" class="dropdown-item">Zenless Zone Zero</a>
+                <a href="https://www.prydwen.gg/wuthering-waves" class="dropdown-item">Wuthering Waves</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Maps -->
+    <h2 class="category-title">Game Maps</h2>
+    <div class="button-grid">
+        <div class="dropdown-container">
+            <button class="hub-button">HSR Map</button>
+            <div class="dropdown-content">
+                <a href="https://star-rail-map.appsample.com/" class="dropdown-item">Full Map</a>
+                <a href="https://star-rail-map.appsample.com/chest" class="dropdown-item">Chests</a>
+                <a href="https://star-rail-map.appsample.com/challenge" class="dropdown-item">Challenges</a>
+            </div>
+        </div>
+
+        <div class="dropdown-container">
+            <button class="hub-button">Genshin Map</button>
+            <div class="dropdown-content">
+                <a href="https://genshin-impact-map.appsample.com/" class="dropdown-item">Full Map</a>
+                <a href="https://genshin-impact-map.appsample.com/chest" class="dropdown-item">Chests</a>
+                <a href="https://genshin-impact-map.appsample.com/oculus" class="dropdown-item">Oculi</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Streaming & Entertainment -->
+    <h2 class="category-title">Streaming & Entertainment</h2>
+    <div class="button-grid">
+        <div class="dropdown-container">
+            <button class="hub-button" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(event)">Twitch</button>
+            <div class="dropdown-content">
+                <a href="https://www.twitch.tv/" class="dropdown-item">Home</a>
+                <a href="https://www.twitch.tv/directory/following" class="dropdown-item">Following</a>
+                <a href="https://www.twitch.tv/directory" class="dropdown-item">Browse</a>
+                <a href="https://www.twitch.tv/channels" class="dropdown-item">Channels</a>
+
+                <div class="nested-dropdown-container">
+                    <button class="hub-button" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(event)">Twitch Channels</button>
+                    <div class="dropdown-content">
+                        <a href="https://www.twitch.tv/kinkymation" class="dropdown-item">Kinkymation</a>
+                        <a href="https://www.twitch.tv/mollozhang" class="dropdown-item">Mollozhang</a>
+                        <a href="https://www.twitch.tv/itssamslade" class="dropdown-item">Itssamslade</a>
+                        <a href="https://www.twitch.tv/minaaoyama" class="dropdown-item">Minaaoyama</a>
+                        <a href="https://www.twitch.tv/ibcheechy" class="dropdown-item">Ibcheechy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dropdown-container">
+            <button class="hub-button">YouTube</button>
+            <div class="dropdown-content">
+                <a href="https://www.youtube.com" class="dropdown-item">Home</a>
+                <a href="https://www.youtube.com/playlist?list=WL" class="dropdown-item">Watch Later</a>
+                <a href="https://www.youtube.com/feed/history" class="dropdown-item">History</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anime & Shows -->
+    <h2 class="category-title">Anime & Shows</h2>
+    <div class="button-grid">
+        <div class="dropdown-container">
+            <button class="hub-button">Pokéflix</button>
+            <div class="dropdown-content">
+                <a href="https://www.pokeflix.tv/index/" class="dropdown-item">Home</a>
+                <a href="https://www.pokeflix.tv/browse/pokemon-black-and-white" class="dropdown-item">Black & White</a>
+                <a href="https://www.pokeflix.tv/account/" class="dropdown-item">Account</a>
+            </div>
+        </div>
+
+        <div class="dropdown-container">
+            <button class="hub-button">Miraculous</button>
+            <div class="dropdown-content">
+                <a href="https://miraculous.to/en/" class="dropdown-item">Watch Miraculous</a>
+            </div>
+        </div>
+
+        <div class="dropdown-container">
+            <button class="hub-button">HiAnime</button>
+            <div class="dropdown-content">
+                <a href="https://hianime.to/home" class="dropdown-item">Watch Anime</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social & General -->
+    <h2 class="category-title">Social & General</h2>
+    <div class="button-grid">
+        <div class="dropdown-container">
+            <button class="hub-button">Google</button>
+            <div class="dropdown-content">
+                <a href="https://www.google.com" class="dropdown-item">Search</a>
+                <a href="https://mail.google.com" class="dropdown-item">Gmail</a>
+                <a href="https://drive.google.com" class="dropdown-item">Drive</a>
+            </div>
+        </div>
+
+        <div class="dropdown-container">
+            <button class="hub-button">Reddit</button>
+            <div class="dropdown-content">
+                <a href="https://www.reddit.com" class="dropdown-item">Home</a>
+                <a href="https://www.reddit.com/r/all" class="dropdown-item">All</a>
+                <a href="https://www.reddit.com/r/popular" class="dropdown-item">Popular</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tools & Media -->
+    <h2 class="category-title">Tools & Media</h2>
+    <div class="button-grid">
+        <div class="dropdown-container">
+            <button class="hub-button">Suno AI</button>
+            <div class="dropdown-content">
+                <a href="https://suno.com/" class="dropdown-item">Home</a>
+                <a href="https://suno.com/create" class="dropdown-item">Create</a>
+                <a href="https://suno.com/library" class="dropdown-item">Library</a>
+            </div>
+        </div>
+
+        <div class="dropdown-container">
+            <button class="hub-button">Plex</button>
+            <div class="dropdown-content">
+                <a href="https://app.plex.tv/desktop" class="dropdown-item">Desktop App</a>
+                <a href="https://app.plex.tv/desktop/discover" class="dropdown-item">Discover</a>
+                <a href="https://app.plex.tv/desktop/library" class="dropdown-item">Library</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="secret-menu" id="secretMenu">
+    <button class="close-secret" onclick="toggleSecretMenu()">&#xd7;</button>
+    <h2 style="color: white; margin-bottom: 1rem;">Secret Menu</h2>
+    <button class="secret-button" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">Don't Click Me</button>
+    <button class="secret-button" onclick="makeItRain()">Make it Rain</button>
+    <button class="secret-button" onclick="partyMode()">Party Mode</button>
+</div>
+
+<div class="secret-hint">
+    Press K + O + N + A + M + I
+</div>
+
+<script>
+    function toggleDropdown(event) {
+        event.target.setAttribute("aria-expanded", event.target.getAttribute("aria-expanded") === "true" ? "false" : "true");
+    }
+    function toggleSecretMenu() {
+        var menu = document.getElementById("secretMenu");
+        menu.classList.toggle("show");
+    }
+    function makeItRain() {}
+    function partyMode() {}
+</script>
+
+</body>
+</html>
